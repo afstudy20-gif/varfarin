@@ -23,7 +23,7 @@ Asagidaki durumlarda uygulama otomatik oneriyi durdurur ve ust duzey uyari verir
 - Aktif kanama / melena / hematemez / norolojik alarm semptomu
 - `INR >= 5`
 
-## Calistirma
+## Yerel calistirma
 
 Dosyayi dogrudan acabilirsiniz:
 
@@ -38,12 +38,66 @@ python3 -m http.server 8080
 
 Sonra `http://localhost:8080` adresini ziyaret edin.
 
+## Coolify deployment
+
+Bu repo artik Coolify icin iki farkli yolla hazir:
+
+1. Onerilen yol: `Dockerfile` build pack
+2. Alternatif yol: `Static` build pack
+
+### Onerilen: Dockerfile build pack
+
+Repoya `Dockerfile`, `.dockerignore` ve `nginx/default.conf` eklendi. Bu yapi,
+uygulamayi Nginx ile container icinde sunar ve `healthz` endpoint'i verir.
+
+Coolify ayarlari:
+
+- Repository: `https://github.com/afstudy20-gif/varfarin`
+- Branch: `main`
+- Build Pack: `Dockerfile`
+- Base Directory: `/`
+- Port: `8080`
+- Environment variables: gerekmez
+
+Coolify ekraninda:
+
+1. `Create New Resource`
+2. Repo baglayin
+3. Build pack olarak `Dockerfile` secin
+4. Base Directory alanina `/` girin
+5. Network/Port alanini `8080` yapin
+6. Domain ekleyip deploy edin
+
+Bu secenegi onermemin nedeni, build ve runtime davranisinin repo icinde net ve
+tekrar edilebilir olmasi.
+
+### Alternatif: Static build pack
+
+Coolify'nin resmi dokumanina gore Static build pack, zaten hazir olan HTML/CSS/JS
+dosyalarini dogrudan web sunucusuyla yayinlayabilir. Bu proje de zaten build gerektirmeyen
+hazir statik dosyalardan olustugu icin bu secenek de uygundur.
+
+Coolify ayarlari:
+
+- Build Pack: `Static`
+- Base Directory: `/`
+- Web server: varsayilan `Nginx`
+
+Bu yolda Dockerfile kullanmaniz gerekmez. Ancak bu repoda Dockerfile da birakildi;
+boylece iki yol arasinda secim yapabilirsiniz.
+
 ## Test
 
 ```bash
 cd /Users/yh/Documents/Playground/warfarin-doz-asistani
 npm test
 ```
+
+## Container dosyalari
+
+- `Dockerfile`: Coolify Dockerfile build pack ile kullanilir
+- `nginx/default.conf`: `8080` portunda Nginx sunucusu ve `/healthz` endpoint'i
+- `.dockerignore`: gereksiz dosyalari image disinda tutar
 
 ## Literatur ozetleri
 
@@ -63,3 +117,9 @@ Bu uygulamanin klinik cekirdegi dort ana kaynaga dayaniyor:
 Uygulamadaki `onceki INR + ara donem kullanim` mantigi, kilavuzdaki doz ayar bantlarini
 daha temkinli veya daha agresif kullanmak icin tasarlanmis bir uygulama karar katmanidir.
 Bu kisim ayri bir klinik prediksiyon modeli olarak valide edilmis degildir.
+
+## Coolify kaynaklari
+
+- Dockerfile Build Pack: https://coolify.io/docs/applications/build-packs/dockerfile
+- Static Build Pack: https://coolify.io/docs/builds/packs/static
+- Applications ayarlari: https://coolify.io/docs/applications/
