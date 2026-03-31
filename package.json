@@ -1,0 +1,8 @@
+{
+  "name": "warfarin-doz-asistani",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/warfarin.test.mjs"
+  }
+}

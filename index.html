@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Varfarin Doz Asistani</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Klinik Karar Destegi</p>
+        <h1>Varfarin doz ayarlama asistani</h1>
+        <p class="hero-copy">
+          Ayaktan, kanamasiz varfarin bakim tedavisinde mevcut kullanim, o gunun
+          INR degeri ve istenirse onceki INR ile ara donem gercek kullanim
+          bilgisine gore haftalik doz onerisi ve bir sonraki INR zamani uretir.
+        </p>
+        <div class="alert-strip">
+          Bu arac kanama, INR &gt;= 5, gebelik, yeni major ilac etkilesimi,
+          hospitalizasyon veya baslangic varfarin titrasyonu icin degil; ayaktan
+          bakim dozu karar destegi icindir.
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="card form-card">
+          <div class="section-heading">
+            <p class="section-kicker">Girdi</p>
+            <h2>Hasta ve doz bilgisi</h2>
+          </div>
+
+          <form id="warfarin-form" novalidate>
+            <div class="field-grid">
+              <label class="field">
+                <span>Hedef INR araligi</span>
+                <select id="target-range">
+                  <option value="standard">2.0 - 3.0</option>
+                  <option value="high">2.5 - 3.5</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Tablet gucu (mg)</span>
+                <input id="tablet-strength" type="number" min="0.5" step="0.5" value="5" />
+              </label>
+
+              <label class="field">
+                <span>Bugunku INR</span>
+                <input id="current-inr" type="number" min="0.8" max="12" step="0.1" value="2.4" />
+              </label>
+
+              <label class="field">
+                <span>Bugunku INR tarihi</span>
+                <input id="current-date" type="date" />
+              </label>
+
+              <label class="field">
+                <span>Onceki INR (opsiyonel)</span>
+                <input id="previous-inr" type="number" min="0.8" max="12" step="0.1" />
+              </label>
+
+              <label class="field">
+                <span>Onceki INR tarihi (opsiyonel)</span>
+                <input id="previous-date" type="date" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Mevcut tekrar eden kullanim paterni</span>
+              <textarea
+                id="pattern-input"
+                rows="3"
+                placeholder="Ornek: her gun 1 adet | 1 gun 1 adet 1 gun yarim | pzt 1, sali 1, carsamba 0.5..."
+              >her gun 1 adet</textarea>
+              <small>
+                Metni cozdurup alttaki 7 gunluk tabloyu doldurabilirsiniz; gerekirse
+                tabloyu elle duzeltin.
+              </small>
+            </label>
+
+            <div class="button-row">
+              <button type="button" class="secondary-button" id="parse-pattern">
+                Paterni coz
+              </button>
+            </div>
+
+            <div class="weekly-panel">
+              <div class="weekly-header">
+                <div>
+                  <p class="section-kicker">Haftalik Plan</p>
+                  <h3>7 gunluk doz tablosu</h3>
+                </div>
+                <div class="dose-summary" id="weekly-summary">
+                  Haftalik toplam: 0 tablet
+                </div>
+              </div>
+              <div class="week-grid" id="week-grid"></div>
+            </div>
+
+            <label class="field">
+              <span>Onceki INR'den bugune gercek kullanim (opsiyonel)</span>
+              <textarea
+                id="interval-pattern"
+                rows="3"
+                placeholder="Ara donemi daha iyi yansitmak icin girin. Ornek: her gun 1 adet | 1 gun 1 adet 1 gun yarim | 1,1,0.5,1,1,0.5..."
+              ></textarea>
+              <small>
+                Onceki INR tarihi de varsa, uygulama bu kullanimdan haftalik esdeger
+                dozu hesaplar ve ana karar mantiginda onu kullanir.
+              </small>
+            </label>
+
+            <label class="field">
+              <span>Gecici aciklayici faktor</span>
+              <select id="transient-factor">
+                <option value="none">Yok / bilinmiyor</option>
+                <option value="low">Dusuk INR'yi aciklayabilecek gecici neden var (atlanan doz, K vitamini artisi)</option>
+                <option value="high">Yuksek INR'yi aciklayabilecek gecici neden var (antibiyotik, alkol, ishal, azalan alim)</option>
+              </select>
+            </label>
+
+            <label class="checkbox-field">
+              <input id="active-bleeding" type="checkbox" />
+              <span>Aktif kanama, melena/hematemez, norolojik semptom veya acil risk var</span>
+            </label>
+
+            <div class="button-row">
+              <button type="submit" class="primary-button">Oneri uret</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card result-card">
+          <div class="section-heading">
+            <p class="section-kicker">Sonuc</p>
+            <h2>Doz onerisi ve takip</h2>
+          </div>
+          <div id="result-root" class="result-root">
+            <div class="empty-state">
+              INR ve kullanim bilgilerini girip <strong>Oneri uret</strong>
+              dugmesine basin.
+            </div>
+          </div>
+        </section>
+
+        <section class="card note-card">
+          <div class="section-heading">
+            <p class="section-kicker">Yontem</p>
+            <h2>Literatur temeli ve kapsam</h2>
+          </div>
+          <div class="method-list">
+            <p>
+              Uygulama, bakim dozu icin toplam haftalik dozun yuzdesel ayari
+              mantigini kullanan seffaf bir nomogram yaklasimi uzerine kuruldu.
+            </p>
+            <p>
+              Hafif tek sapmada doz degistirmeden 1-2 hafta icinde tekrar INR
+              bakma secenegi korunur; daha belirgin sapmalarda haftalik dozda
+              genelde %5-20 degisim onerilir.
+            </p>
+            <p>
+              Onceki INR ve ara donem gercek kullanim girildiginde, uygulama
+              bant icinden daha temkinli veya daha agresif ucu secmek icin trend
+              bilgisi kullanir. Bu kisim, kilavuz bandlari uzerine kurulmus
+              uygulama mantigidir; ayri bir dogrulanmis prediktif model degildir.
+            </p>
+            <ul class="source-list">
+              <li>
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3278060/" target="_blank" rel="noreferrer">
+                  CHEST 2012 antitrombotik kilavuz ozeti
+                </a>
+              </li>
+              <li>
+                <a href="https://sites.uw.edu/anticoag/drugs/warfarin/" target="_blank" rel="noreferrer">
+                  UW Medicine varfarin bakim dozu nomogrami
+                </a>
+              </li>
+              <li>
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9131906/" target="_blank" rel="noreferrer">
+                  Hafif tek sapmada watchful waiting verisi (Blood Advances 2022)
+                </a>
+              </li>
+              <li>
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8056736/" target="_blank" rel="noreferrer">
+                  Warfarin doz algoritmalari sistematik derleme
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
