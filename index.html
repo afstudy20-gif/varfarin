@@ -8,18 +8,34 @@
     />
     <title>Varfarin Doz Asistani</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#145c6d" />
   </head>
   <body>
     <div class="page-shell">
       <header class="hero">
-        <p class="eyebrow">Klinik Karar Destegi</p>
-        <h1>Varfarin doz ayarlama asistani</h1>
+        <div class="hero-top">
+          <div>
+            <p class="eyebrow">Klinik Karar Destegi</p>
+            <h1>Varfarin doz ayarlama asistani</h1>
+          </div>
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Karanlik/acik mod degistir"
+            title="Tema degistir"
+          >
+            <span class="theme-icon-light">&#9788;</span>
+            <span class="theme-icon-dark">&#9790;</span>
+          </button>
+        </div>
         <p class="hero-copy">
           Ayaktan, kanamasiz varfarin bakim tedavisinde mevcut kullanim, o gunun
           INR degeri ve istenirse onceki INR ile ara donem gercek kullanim
           bilgisine gore haftalik doz onerisi ve bir sonraki INR zamani uretir.
         </p>
-        <div class="alert-strip">
+        <div class="alert-strip" role="alert">
           Bu arac kanama, INR &gt;= 5, gebelik, yeni major ilac etkilesimi,
           hospitalizasyon veya baslangic varfarin titrasyonu icin degil; ayaktan
           bakim dozu karar destegi icindir.
@@ -36,7 +52,7 @@
           <form id="warfarin-form" novalidate>
             <div class="field-grid">
               <label class="field">
-                <span>Hedef INR araligi</span>
+                <span>Hedef INR araligi <span class="required">*</span></span>
                 <select id="target-range">
                   <option value="standard">2.0 - 3.0</option>
                   <option value="high">2.5 - 3.5</option>
@@ -44,17 +60,17 @@
               </label>
 
               <label class="field">
-                <span>Tablet gucu (mg)</span>
+                <span>Tablet gucu (mg) <span class="required">*</span></span>
                 <input id="tablet-strength" type="number" min="0.5" step="0.5" value="5" />
               </label>
 
               <label class="field">
-                <span>Bugunku INR</span>
+                <span>Bugunku INR <span class="required">*</span></span>
                 <input id="current-inr" type="number" min="0.8" max="12" step="0.1" value="2.4" />
               </label>
 
               <label class="field">
-                <span>Bugunku INR tarihi</span>
+                <span>Bugunku INR tarihi <span class="required">*</span></span>
                 <input id="current-date" type="date" />
               </label>
 
@@ -70,7 +86,7 @@
             </div>
 
             <label class="field">
-              <span>Mevcut tekrar eden kullanim paterni</span>
+              <span>Mevcut tekrar eden kullanim paterni <span class="required">*</span></span>
               <textarea
                 id="pattern-input"
                 rows="3"
@@ -86,6 +102,11 @@
               <button type="button" class="secondary-button" id="parse-pattern">
                 Paterni coz
               </button>
+              <div class="quick-patterns">
+                <button type="button" class="chip-button" data-pattern="her gun 1 adet">Her gun 1</button>
+                <button type="button" class="chip-button" data-pattern="1 gun 1 adet 1 gun yarim">1-yarim</button>
+                <button type="button" class="chip-button" data-pattern="her gun yarim">Her gun yarim</button>
+              </div>
             </div>
 
             <div class="weekly-panel">
@@ -94,11 +115,11 @@
                   <p class="section-kicker">Haftalik Plan</p>
                   <h3>7 gunluk doz tablosu</h3>
                 </div>
-                <div class="dose-summary" id="weekly-summary">
+                <div class="dose-summary" id="weekly-summary" aria-live="polite">
                   Haftalik toplam: 0 tablet
                 </div>
               </div>
-              <div class="week-grid" id="week-grid"></div>
+              <div class="week-grid" id="week-grid" role="grid" aria-label="Haftalik doz tablosu"></div>
             </div>
 
             <label class="field">
@@ -123,6 +144,18 @@
               </select>
             </label>
 
+            <label class="field">
+              <span>Eslik eden ilaclar (opsiyonel)</span>
+              <input
+                id="drug-input"
+                type="text"
+                placeholder="Ornek: flukonazol, amiodaron, rifampisin..."
+              />
+              <small>
+                Warfarin ile etkilesimi bilinen ilaclari virgul ile ayirarak girin.
+              </small>
+            </label>
+
             <label class="checkbox-field">
               <input id="active-bleeding" type="checkbox" />
               <span>Aktif kanama, melena/hematemez, norolojik semptom veya acil risk var</span>
@@ -139,12 +172,28 @@
             <p class="section-kicker">Sonuc</p>
             <h2>Doz onerisi ve takip</h2>
           </div>
-          <div id="result-root" class="result-root">
+          <div id="result-root" class="result-root" aria-live="polite">
             <div class="empty-state">
               INR ve kullanim bilgilerini girip <strong>Oneri uret</strong>
               dugmesine basin.
             </div>
           </div>
+        </section>
+
+        <section class="card history-card" id="history-section" style="display:none">
+          <div class="section-heading">
+            <div class="section-heading-row">
+              <div>
+                <p class="section-kicker">Gecmis</p>
+                <h2>INR ve doz takibi</h2>
+              </div>
+              <button type="button" class="secondary-button small-button" id="clear-history">
+                Gecmisi temizle
+              </button>
+            </div>
+          </div>
+          <div id="history-chart" class="history-chart"></div>
+          <div id="history-table-root"></div>
         </section>
 
         <section class="card note-card">
@@ -196,5 +245,10 @@
     </div>
 
     <script type="module" src="./src/app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    </script>
   </body>
 </html>

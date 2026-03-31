@@ -34,6 +34,11 @@ const DAY_ALIASES = {
 };
 
 export function normalizeTurkish(text = "") {
+  let normalized = String(text)
+    .replace(/İ/g, "i")
+    .replace(/I/g, "i")
+    .toLowerCase();
+
   const map = {
     c: /[cç]/g,
     g: /[gğ]/g,
@@ -43,7 +48,6 @@ export function normalizeTurkish(text = "") {
     u: /[uü]/g
   };
 
-  let normalized = String(text).toLowerCase();
   Object.entries(map).forEach(([replacement, pattern]) => {
     normalized = normalized.replace(pattern, replacement);
   });
@@ -227,7 +231,7 @@ export function parseDosePattern(text, tabletStrengthMg = 5) {
   }
 
   const alternatingParts = normalized
-    .split(/(?:^|\s)(?:1|bir)\s*gun\s+/)
+    .split(/(?:^|\s)\b(?:1|bir)\b\s*gun\s+/)
     .map((part) => part.trim())
     .filter(Boolean);
 
@@ -294,7 +298,7 @@ export function buildBalancedSchedule(totalWeeklyTablets, dayCount = 7) {
   return schedule;
 }
 
-function classifyInr(currentInr, target) {
+export function classifyInr(currentInr, target) {
   const lowGap = target.low - currentInr;
   const highGap = currentInr - target.high;
 
@@ -526,6 +530,8 @@ export function analyzeWarfarinCase({
 
   if (!Number.isFinite(currentInr)) {
     errors.push("Bugunku INR sayisal olmali.");
+  } else if (currentInr < 0.5 || currentInr > 15) {
+    errors.push("INR degeri 0.5 ile 15 arasinda olmali.");
   }
 
   if (!Number.isFinite(tabletStrengthMg) || tabletStrengthMg <= 0) {
