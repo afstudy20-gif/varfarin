@@ -35,16 +35,18 @@
 
       <!-- ─── Hero ───────────────────────────────────────────────── -->
       <header class="hero">
-        <p class="eyebrow">Klinik Karar Desteği</p>
-        <h1>Varfarin doz<br />ayarlama asistanı</h1>
-        <p class="hero-copy">
-          Ayaktan, kanamasız varfarin bakım tedavisinde mevcut kullanım, o günün INR değeri
-          ve istenirse önceki INR ile ara dönem gerçek kullanım bilgisine göre haftalık doz
-          önerisi ve bir sonraki INR zamanı üretir.
-        </p>
-        <div class="alert-strip" role="alert">
-          ⚠ Bu araç kanama, INR ≥ 5, gebelik, yeni major ilaç etkileşimi, hospitalizasyon
-          veya başlangıç varfarin titrasyonu için değil; ayaktan bakım dozu karar desteği içindir.
+        <div class="hero-main">
+          <div class="hero-text">
+            <p class="eyebrow">Klinik Karar Desteği</p>
+            <h1>Varfarin doz ayarlama asistanı</h1>
+            <p class="hero-copy">
+              INR değerine ve mevcut kullanım düzenine göre haftalık doz önerisi ve bir sonraki INR zamanı üretir.
+            </p>
+          </div>
+          <div class="alert-strip" role="alert">
+            ⚠ Bu araç kanama, INR ≥ 5, gebelik, yeni major ilaç etkileşimi, hospitalizasyon
+            veya başlangıç varfarin titrasyonu için değil; ayaktan bakım dozu karar desteği içindir.
+          </div>
         </div>
       </header>
 
@@ -58,6 +60,39 @@
           </div>
 
           <form id="warfarin-form" novalidate>
+            <label class="field">
+              <span>Mevcut tekrar eden kullanım paterni <span class="required">*</span></span>
+              <textarea
+                id="pattern-input"
+                rows="2"
+                placeholder="Örnek: her gün 1 adet | 1 gün 1 adet 1 gün yarım | pzt 1, salı 1, çarşamba 0.5…"
+              >her gün 1 adet</textarea>
+            </label>
+
+            <div class="button-row">
+              <button type="button" class="secondary-button" id="parse-pattern">
+                Paterni çöz
+              </button>
+              <div class="quick-patterns">
+                <button type="button" class="chip-button" data-pattern="her gün 1 adet">Her gün 1</button>
+                <button type="button" class="chip-button" data-pattern="1 gün 1 adet 1 gün yarım">1-yarım</button>
+                <button type="button" class="chip-button" data-pattern="her gün yarım">Her gün yarım</button>
+              </div>
+            </div>
+
+            <div class="weekly-panel">
+              <div class="weekly-header">
+                <div>
+                  <p class="section-kicker">Haftalık Plan</p>
+                  <h3>7 günlük doz tablosu</h3>
+                </div>
+                <div class="dose-summary" id="weekly-summary" aria-live="polite">
+                  Haftalık toplam: 0 tablet
+                </div>
+              </div>
+              <div class="week-grid" id="week-grid" role="grid" aria-label="Haftalık doz tablosu"></div>
+            </div>
+
             <div class="field-grid">
               <label class="field">
                 <span>Hedef INR aralığı <span class="required">*</span></span>
@@ -93,76 +128,37 @@
               </label>
             </div>
 
-            <label class="field">
-              <span>Mevcut tekrar eden kullanım paterni <span class="required">*</span></span>
-              <textarea
-                id="pattern-input"
-                rows="3"
-                placeholder="Örnek: her gün 1 adet | 1 gün 1 adet 1 gün yarım | pzt 1, salı 1, çarşamba 0.5…"
-              >her gün 1 adet</textarea>
-              <small>
-                Metni çözüp alttaki 7 günlük tabloyu doldurabilirsiniz; gerekirse
-                tabloyu elle düzeltin.
-              </small>
-            </label>
+            <details class="advanced-details">
+              <summary>› Gelişmiş seçenekler</summary>
+              <div class="advanced-body">
+                <label class="field">
+                  <span>Önceki INR'den bugüne gerçek kullanım (opsiyonel)</span>
+                  <textarea
+                    id="interval-pattern"
+                    rows="2"
+                    placeholder="Ara dönemi daha iyi yansıtmak için girin. Örnek: her gün 1 adet | 1,1,0.5,1,1,0.5…"
+                  ></textarea>
+                </label>
 
-            <div class="button-row">
-              <button type="button" class="secondary-button" id="parse-pattern">
-                Paterni çöz
-              </button>
-              <div class="quick-patterns">
-                <button type="button" class="chip-button" data-pattern="her gün 1 adet">Her gün 1</button>
-                <button type="button" class="chip-button" data-pattern="1 gün 1 adet 1 gün yarım">1-yarım</button>
-                <button type="button" class="chip-button" data-pattern="her gün yarım">Her gün yarım</button>
+                <label class="field">
+                  <span>Geçici açıklayıcı faktör</span>
+                  <select id="transient-factor">
+                    <option value="none">Yok / bilinmiyor</option>
+                    <option value="low">Düşük INR'yi açıklayabilecek geçici neden var (atlanan doz, K vitamini artışı)</option>
+                    <option value="high">Yüksek INR'yi açıklayabilecek geçici neden var (antibiyotik, alkol, ishal, azalan alım)</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Eşlik eden ilaçlar (opsiyonel)</span>
+                  <input
+                    id="drug-input"
+                    type="text"
+                    placeholder="Örnek: flukonazol, amiodaron, rifampisin…"
+                  />
+                </label>
               </div>
-            </div>
-
-            <div class="weekly-panel">
-              <div class="weekly-header">
-                <div>
-                  <p class="section-kicker">Haftalık Plan</p>
-                  <h3>7 günlük doz tablosu</h3>
-                </div>
-                <div class="dose-summary" id="weekly-summary" aria-live="polite">
-                  Haftalık toplam: 0 tablet
-                </div>
-              </div>
-              <div class="week-grid" id="week-grid" role="grid" aria-label="Haftalık doz tablosu"></div>
-            </div>
-
-            <label class="field">
-              <span>Önceki INR'den bugüne gerçek kullanım (opsiyonel)</span>
-              <textarea
-                id="interval-pattern"
-                rows="3"
-                placeholder="Ara dönemi daha iyi yansıtmak için girin. Örnek: her gün 1 adet | 1 gün 1 adet 1 gün yarım | 1,1,0.5,1,1,0.5…"
-              ></textarea>
-              <small>
-                Önceki INR tarihi de varsa, uygulama bu kullanımdan haftalık eşdeğer
-                dozu hesaplar ve ana karar mantığında onu kullanır.
-              </small>
-            </label>
-
-            <label class="field">
-              <span>Geçici açıklayıcı faktör</span>
-              <select id="transient-factor">
-                <option value="none">Yok / bilinmiyor</option>
-                <option value="low">Düşük INR'yi açıklayabilecek geçici neden var (atlanan doz, K vitamini artışı)</option>
-                <option value="high">Yüksek INR'yi açıklayabilecek geçici neden var (antibiyotik, alkol, ishal, azalan alım)</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Eşlik eden ilaçlar (opsiyonel)</span>
-              <input
-                id="drug-input"
-                type="text"
-                placeholder="Örnek: flukonazol, amiodaron, rifampisin…"
-              />
-              <small>
-                Varfarin ile etkileşimi bilinen ilaçları virgül ile ayırarak girin.
-              </small>
-            </label>
+            </details>
 
             <label class="checkbox-field">
               <input id="active-bleeding" type="checkbox" />
