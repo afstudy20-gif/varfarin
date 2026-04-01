@@ -202,6 +202,36 @@
           <div id="history-table-root"></div>
         </section>
 
+        <!-- ─── Interaction Card ──────────────────────────────────── -->
+        <section class="card interaction-card" id="interaction-section">
+          <div class="section-heading">
+            <p class="section-kicker">Rehber</p>
+            <h2>İlaç ve besin etkileşimleri</h2>
+          </div>
+
+          <div class="ix-toolbar">
+            <input
+              type="search"
+              id="ix-search"
+              class="ix-search"
+              placeholder="İlaç veya besin ara…"
+              autocomplete="off"
+            />
+            <div class="ix-filters" id="ix-filters">
+              <button class="ix-chip active" data-filter="all">Tümü</button>
+              <button class="ix-chip" data-filter="drug">İlaçlar</button>
+              <button class="ix-chip" data-filter="food">Besinler</button>
+              <button class="ix-chip ix-sep" data-filter="increase">🔺 Artırır</button>
+              <button class="ix-chip" data-filter="decrease">🔻 Azaltır</button>
+              <button class="ix-chip ix-sep" data-filter="major">Majör</button>
+              <button class="ix-chip" data-filter="moderate">Orta</button>
+              <button class="ix-chip" data-filter="minor">Minör</button>
+            </div>
+          </div>
+
+          <div id="ix-list" class="ix-list" aria-live="polite"></div>
+        </section>
+
         <!-- ─── Method Card ────────────────────────────────────── -->
         <section class="card note-card">
           <div class="section-heading">

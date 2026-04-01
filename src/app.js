@@ -13,6 +13,7 @@ import {
   sumSchedule,
   tabletsToMg
 } from "./warfarin.js";
+import { INTERACTIONS } from "./interactions.js";
 
 // ─── Drug Interactions ──────────────────────────────────────────────
 
@@ -608,6 +609,82 @@ function handleQuickPattern(event) {
   patternInput.value = btn.dataset.pattern;
   parsePatternIntoWeek();
 }
+
+// ─── Interaction Guide ──────────────────────────────────────────────
+
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .replace(/[çÇ]/g, "c").replace(/[şŞ]/g, "s").replace(/[ğĞ]/g, "g")
+    .replace(/[İ]/g, "i").replace(/[ıI]/g, "i")
+    .replace(/[öÖ]/g, "o").replace(/[üÜ]/g, "u");
+}
+
+const ixList = document.getElementById("ix-list");
+const ixSearch = document.getElementById("ix-search");
+let ixFilter = "all";
+
+function renderInteractions() {
+  const q = normalize(ixSearch ? ixSearch.value : "");
+  const entries = INTERACTIONS.filter((ix) => {
+    if (ixFilter !== "all") {
+      if (ixFilter === "drug" && ix.type !== "drug") return false;
+      if (ixFilter === "food" && ix.type !== "food") return false;
+      if (ixFilter === "increase" && ix.direction !== "increase") return false;
+      if (ixFilter === "decrease" && ix.direction !== "decrease") return false;
+      if (ixFilter === "major" && ix.severity !== "major") return false;
+      if (ixFilter === "moderate" && ix.severity !== "moderate") return false;
+      if (ixFilter === "minor" && ix.severity !== "minor") return false;
+    }
+    if (!q) return true;
+    const haystack = normalize(ix.name + " " + (ix.aliases || []).join(" ") + " " + ix.note);
+    return haystack.includes(q);
+  });
+
+  if (!ixList) return;
+
+  if (entries.length === 0) {
+    ixList.innerHTML = `<div class="ix-empty">Sonuç bulunamadı.</div>`;
+    return;
+  }
+
+  const dirIcon = (d) => d === "increase" ? "🔺" : "🔻";
+  const sevLabel = { major: "Majör", moderate: "Orta", minor: "Minör" };
+  const typeLabel = { drug: "İlaç", food: "Besin" };
+
+  ixList.innerHTML = entries.map((ix) => `
+    <div class="ix-card">
+      <div class="ix-card-head">
+        <span class="ix-name">${ix.name}</span>
+        <span class="ix-dir">${dirIcon(ix.direction)}</span>
+      </div>
+      <div class="ix-badges">
+        <span class="ix-badge ix-badge-${ix.severity}">${sevLabel[ix.severity]}</span>
+        <span class="ix-badge ix-badge-${ix.type}">${typeLabel[ix.type]}</span>
+      </div>
+      <div class="ix-mechanism">${ix.mechanism}</div>
+      <div class="ix-note">${ix.note}</div>
+    </div>
+  `).join("");
+}
+
+if (ixSearch) {
+  ixSearch.addEventListener("input", renderInteractions);
+}
+
+const ixFiltersEl = document.getElementById("ix-filters");
+if (ixFiltersEl) {
+  ixFiltersEl.addEventListener("click", (e) => {
+    const chip = e.target.closest(".ix-chip");
+    if (!chip) return;
+    ixFiltersEl.querySelectorAll(".ix-chip").forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    ixFilter = chip.dataset.filter;
+    renderInteractions();
+  });
+}
+
+renderInteractions();
 
 // ─── Init ───────────────────────────────────────────────────────────
 

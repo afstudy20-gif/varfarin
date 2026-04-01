@@ -1,9 +1,10 @@
-const CACHE_NAME = "varfarin-v1.6";
+const CACHE_NAME = "varfarin-v1.7";
 const ASSETS = [
   "/index.html",
   "/styles.css",
   "/src/warfarin.js",
   "/src/app.js",
+  "/src/interactions.js",
   "/manifest.json"
 ];
 
