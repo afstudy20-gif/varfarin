@@ -1,8 +1,8 @@
 export const DAYS = [
   { key: "mon", short: "Pzt", long: "Pazartesi" },
-  { key: "tue", short: "Sali", long: "Sali" },
-  { key: "wed", short: "Cars", long: "Carsamba" },
-  { key: "thu", short: "Pers", long: "Persembe" },
+  { key: "tue", short: "Salı", long: "Salı" },
+  { key: "wed", short: "Çrş", long: "Çarşamba" },
+  { key: "thu", short: "Prş", long: "Perşembe" },
   { key: "fri", short: "Cuma", long: "Cuma" },
   { key: "sat", short: "Cmt", long: "Cumartesi" },
   { key: "sun", short: "Paz", long: "Pazar" }
@@ -68,11 +68,11 @@ export function formatNumber(value, maximumFractionDigits = 1) {
 
 export function formatTablets(value) {
   if (Math.abs(value - 0.5) < 0.001) {
-    return "yarim";
+    return "yarım";
   }
 
   if (Math.abs(value - 0.25) < 0.001) {
-    return "ceyrek";
+    return "çeyrek";
   }
 
   return formatNumber(value, 2);
@@ -336,21 +336,21 @@ export function classifyInr(currentInr, target) {
 function describeStatus(status, target) {
   switch (status) {
     case "veryLow":
-      return `hedef altinda belirgin (${target.low - 0.5} altinda)`;
+      return `hedef altında belirgin (${target.low - 0.5} altında)`;
     case "low":
-      return "hedef altinda";
+      return "hedef altında";
     case "slightlyLow":
-      return "hedefin hafif altinda";
+      return "hedefin hafif altında";
     case "inRange":
-      return "hedef aralikta";
+      return "hedef aralıkta";
     case "slightlyHigh":
-      return "hedefin hafif ustunde";
+      return "hedefin hafif üstünde";
     case "mildHigh":
-      return "hedef ustunde";
+      return "hedef üstünde";
     case "high":
-      return "hedef ustunde belirgin";
+      return "hedef üstünde belirgin";
     case "veryHigh":
-      return "cok yuksek";
+      return "çok yüksek";
     default:
       return "-";
   }
@@ -400,44 +400,44 @@ function chooseDoseAdjustment(status, previousStatus, transientFactor) {
 
 function buildImmediateAction(status, adjustmentPercent, target, currentInr) {
   if (status === "veryLow") {
-    return "Bir kerelik 1.5-2 gunluk doz yuklemesi klinik olarak dusunulebilir; sonra asagidaki bakim planina gecilir.";
+    return "Bir kerelik 1.5–2 günlük doz yüklemesi klinik olarak düşünülebilir; sonra aşağıdaki bakım planına geçilir.";
   }
 
   if (status === "low") {
-    return "Gerekirse bir kerelik 1.5 gunluk doz yuklemesi dusunulebilir; sonra asagidaki bakim planina gecilir.";
+    return "Gerekirse bir kerelik 1.5 günlük doz yüklemesi düşünülebilir; sonra aşağıdaki bakım planına geçilir.";
   }
 
   if (status === "slightlyLow") {
     if (adjustmentPercent === 0) {
-      return "Mevcut bakim dozu korunabilir; dozu degistirmeden yakin INR kontrolu uygundur.";
+      return "Mevcut bakım dozu korunabilir; dozu değiştirmeden yakın INR kontrolü uygundur.";
     }
-    return "Kucuk bir haftalik artis ve yakin INR kontrolu uygundur.";
+    return "Küçük bir haftalık artış ve yakın INR kontrolü uygundur.";
   }
 
   if (status === "inRange") {
-    return `Mevcut haftalik doz korunur; hedef INR ${target.label} icinde.`;
+    return `Mevcut haftalık doz korunur; hedef INR ${target.label} içinde.`;
   }
 
   if (status === "slightlyHigh") {
     if (adjustmentPercent === 0) {
-      return "Tek hafif yukseklikte doz degistirmeden izlem dusunulebilir.";
+      return "Tek hafif yükseklikte doz değiştirmeden izlem düşünülebilir.";
     }
-    return "Kucuk bir haftalik azalis ve yakin INR kontrolu uygundur.";
+    return "Küçük bir haftalık azalış ve yakın INR kontrolü uygundur.";
   }
 
   if (status === "mildHigh") {
-    return "0.5-1 doz atlama klinik olarak dusunulebilir; sonra asagidaki azaltilmis plana gecilir.";
+    return "0.5–1 doz atlama klinik olarak düşünülebilir; sonra aşağıdaki azaltılmış plana geçilir.";
   }
 
   if (status === "high") {
-    return "1 doz atlama dusunulur; sonra asagidaki azaltilmis bakim planina gecilir.";
+    return "1 doz atlama düşünülür; sonra aşağıdaki azaltılmış bakım planına geçilir.";
   }
 
   if (status === "veryHigh") {
     if (currentInr >= 5) {
-      return "Bu esikte otomatik ayaktan doz onerisi durdurulur; yuksek INR yonetimi ve kanama degerlendirmesi gerekir.";
+      return "Bu eşikte otomatik ayaktan doz önerisi durdurulur; yüksek INR yönetimi ve kanama değerlendirmesi gerekir.";
     }
-    return "Doz gecici tutulur; INR terapotik araliga yaklasinca azaltilmis bakim planina gecilir.";
+    return "Doz geçici tutulur; INR terapötik aralığa yaklaşınca azaltılmış bakım planına geçilir.";
   }
 
   return "-";
@@ -470,31 +470,31 @@ function explainAdjustment(status, adjustmentPercent, previousStatus, transientF
   const reasons = [];
 
   if (usedHistory) {
-    reasons.push("Ara donem gercek kullanim verildigi icin temel doz hesabinda o kullanimdan turetilen haftalik esdeger doz baz alindi.");
+    reasons.push("Ara dönem gerçek kullanım verildiği için temel doz hesabında o kullanımdan türetilen haftalık eşdeğer doz baz alındı.");
   } else {
-    reasons.push("Gercek ara donem kullanim girilmedigi icin mevcut 7 gunluk plan temel haftalik doz olarak kullanildi.");
+    reasons.push("Gerçek ara dönem kullanım girilmediği için mevcut 7 günlük plan temel haftalık doz olarak kullanıldı.");
   }
 
   if (previousStatus === "inRange" && (status === "slightlyLow" || status === "slightlyHigh")) {
-    reasons.push("Onceki INR hedefte oldugu ve sapma hafif oldugu icin kilavuzdaki watchful waiting mantigi korundu.");
+    reasons.push("Önceki INR hedefte olduğu ve sapma hafif olduğu için kılavuzdaki watchful waiting mantığı korundu.");
   } else if (LOW_STATES.has(status) && LOW_STATES.has(previousStatus)) {
-    reasons.push("Art arda dusuk yone giden INR oldugu icin ayar bandinin daha yuksek ucu secildi.");
+    reasons.push("Art arda düşük yöne giden INR olduğu için ayar bandının daha yüksek ucu seçildi.");
   } else if (HIGH_STATES.has(status) && HIGH_STATES.has(previousStatus)) {
-    reasons.push("Art arda yuksek yone giden INR oldugu icin ayar bandinin daha guclu azaltma ucu secildi.");
+    reasons.push("Art arda yüksek yöne giden INR olduğu için ayar bandının daha güçlü azaltma ucu seçildi.");
   }
 
   if (transientFactor === "low" && LOW_STATES.has(status)) {
-    reasons.push("Dusuk INR'yi aciklayabilecek gecici neden isaretlendigi icin kalici haftalik artis daha temkinli tutuldu.");
+    reasons.push("Düşük INR'yi açıklayabilecek geçici neden işaretlendiği için kalıcı haftalık artış daha temkinli tutuldu.");
   }
 
   if (transientFactor === "high" && HIGH_STATES.has(status)) {
-    reasons.push("Yuksek INR'yi aciklayabilecek gecici neden isaretlendigi icin kalici haftalik azalis daha temkinli tutuldu.");
+    reasons.push("Yüksek INR'yi açıklayabilecek geçici neden işaretlendiği için kalıcı haftalık azalış daha temkinli tutuldu.");
   }
 
   if (adjustmentPercent === 0) {
-    reasons.push("Bu karar, kucuk sapmada dozu sabit tutup tekrar INR bakma secenegini acik bir secenek olarak korur.");
+    reasons.push("Bu karar, küçük sapmada dozu sabit tutup tekrar INR bakma seçeneğini açık bir seçenek olarak korur.");
   } else {
-    reasons.push(`Bakim dozu karari toplam haftalik dozun ${toFixedPercent(adjustmentPercent)} ayarlanmasi mantigi ile verildi.`);
+    reasons.push(`Bakım dozu kararı toplam haftalık dozun ${toFixedPercent(adjustmentPercent)} ayarlanması mantığı ile verildi.`);
   }
 
   return reasons;

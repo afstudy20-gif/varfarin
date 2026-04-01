@@ -2,47 +2,55 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Varfarin Doz Asistani</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Varfarin Doz Asistanı — DrTR Tools</title>
+    <meta name="description" content="INR değerine ve mevcut kullanım düzenine göre varfarin haftalık doz önerisi üreten klinik karar destek aracı." />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="manifest" href="./manifest.json" />
     <meta name="theme-color" content="#145c6d" />
   </head>
   <body>
     <div class="page-shell">
-      <header class="hero">
-        <div class="hero-top">
-          <div>
-            <p class="eyebrow">Klinik Karar Destegi</p>
-            <h1>Varfarin doz ayarlama asistani</h1>
-          </div>
+
+      <!-- ─── Top Nav ─────────────────────────────────────────────── -->
+      <nav class="topnav">
+        <a href="https://drtr.uk" class="nav-brand">
+          <span class="nav-logo">DT</span>
+          <span class="nav-brand-text">DrTR <span class="nav-tools">Tools</span></span>
+        </a>
+        <div class="nav-actions">
+          <a href="https://drtr.uk" class="nav-back">← Tüm Araçlar</a>
           <button
             type="button"
             class="theme-toggle"
             id="theme-toggle"
-            aria-label="Karanlik/acik mod degistir"
-            title="Tema degistir"
+            aria-label="Karanlık / açık mod değiştir"
+            title="Tema değiştir"
           >
-            <span class="theme-icon-light">&#9788;</span>
-            <span class="theme-icon-dark">&#9790;</span>
+            <span class="theme-icon-light">☀</span>
+            <span class="theme-icon-dark">☾</span>
           </button>
         </div>
+      </nav>
+
+      <!-- ─── Hero ───────────────────────────────────────────────── -->
+      <header class="hero">
+        <p class="eyebrow">Klinik Karar Desteği</p>
+        <h1>Varfarin doz<br />ayarlama asistanı</h1>
         <p class="hero-copy">
-          Ayaktan, kanamasiz varfarin bakim tedavisinde mevcut kullanim, o gunun
-          INR degeri ve istenirse onceki INR ile ara donem gercek kullanim
-          bilgisine gore haftalik doz onerisi ve bir sonraki INR zamani uretir.
+          Ayaktan, kanamasız varfarin bakım tedavisinde mevcut kullanım, o günün INR değeri
+          ve istenirse önceki INR ile ara dönem gerçek kullanım bilgisine göre haftalık doz
+          önerisi ve bir sonraki INR zamanı üretir.
         </p>
         <div class="alert-strip" role="alert">
-          Bu arac kanama, INR &gt;= 5, gebelik, yeni major ilac etkilesimi,
-          hospitalizasyon veya baslangic varfarin titrasyonu icin degil; ayaktan
-          bakim dozu karar destegi icindir.
+          ⚠ Bu araç kanama, INR ≥ 5, gebelik, yeni major ilaç etkileşimi, hospitalizasyon
+          veya başlangıç varfarin titrasyonu için değil; ayaktan bakım dozu karar desteği içindir.
         </div>
       </header>
 
       <main class="layout">
+
+        <!-- ─── Form Card ──────────────────────────────────────── -->
         <section class="card form-card">
           <div class="section-heading">
             <p class="section-kicker">Girdi</p>
@@ -52,143 +60,145 @@
           <form id="warfarin-form" novalidate>
             <div class="field-grid">
               <label class="field">
-                <span>Hedef INR araligi <span class="required">*</span></span>
+                <span>Hedef INR aralığı <span class="required">*</span></span>
                 <select id="target-range">
-                  <option value="standard">2.0 - 3.0</option>
-                  <option value="high">2.5 - 3.5</option>
+                  <option value="standard">2.0 – 3.0</option>
+                  <option value="high">2.5 – 3.5</option>
                 </select>
               </label>
 
               <label class="field">
-                <span>Tablet gucu (mg) <span class="required">*</span></span>
+                <span>Tablet gücü (mg) <span class="required">*</span></span>
                 <input id="tablet-strength" type="number" min="0.5" step="0.5" value="5" />
               </label>
 
               <label class="field">
-                <span>Bugunku INR <span class="required">*</span></span>
+                <span>Bugünkü INR <span class="required">*</span></span>
                 <input id="current-inr" type="number" min="0.8" max="12" step="0.1" value="2.4" />
               </label>
 
               <label class="field">
-                <span>Bugunku INR tarihi <span class="required">*</span></span>
+                <span>Bugünkü INR tarihi <span class="required">*</span></span>
                 <input id="current-date" type="date" />
               </label>
 
               <label class="field">
-                <span>Onceki INR (opsiyonel)</span>
+                <span>Önceki INR (opsiyonel)</span>
                 <input id="previous-inr" type="number" min="0.8" max="12" step="0.1" />
               </label>
 
               <label class="field">
-                <span>Onceki INR tarihi (opsiyonel)</span>
+                <span>Önceki INR tarihi (opsiyonel)</span>
                 <input id="previous-date" type="date" />
               </label>
             </div>
 
             <label class="field">
-              <span>Mevcut tekrar eden kullanim paterni <span class="required">*</span></span>
+              <span>Mevcut tekrar eden kullanım paterni <span class="required">*</span></span>
               <textarea
                 id="pattern-input"
                 rows="3"
-                placeholder="Ornek: her gun 1 adet | 1 gun 1 adet 1 gun yarim | pzt 1, sali 1, carsamba 0.5..."
-              >her gun 1 adet</textarea>
+                placeholder="Örnek: her gün 1 adet | 1 gün 1 adet 1 gün yarım | pzt 1, salı 1, çarşamba 0.5…"
+              >her gün 1 adet</textarea>
               <small>
-                Metni cozdurup alttaki 7 gunluk tabloyu doldurabilirsiniz; gerekirse
-                tabloyu elle duzeltin.
+                Metni çözüp alttaki 7 günlük tabloyu doldurabilirsiniz; gerekirse
+                tabloyu elle düzeltin.
               </small>
             </label>
 
             <div class="button-row">
               <button type="button" class="secondary-button" id="parse-pattern">
-                Paterni coz
+                Paterni çöz
               </button>
               <div class="quick-patterns">
-                <button type="button" class="chip-button" data-pattern="her gun 1 adet">Her gun 1</button>
-                <button type="button" class="chip-button" data-pattern="1 gun 1 adet 1 gun yarim">1-yarim</button>
-                <button type="button" class="chip-button" data-pattern="her gun yarim">Her gun yarim</button>
+                <button type="button" class="chip-button" data-pattern="her gün 1 adet">Her gün 1</button>
+                <button type="button" class="chip-button" data-pattern="1 gün 1 adet 1 gün yarım">1-yarım</button>
+                <button type="button" class="chip-button" data-pattern="her gün yarım">Her gün yarım</button>
               </div>
             </div>
 
             <div class="weekly-panel">
               <div class="weekly-header">
                 <div>
-                  <p class="section-kicker">Haftalik Plan</p>
-                  <h3>7 gunluk doz tablosu</h3>
+                  <p class="section-kicker">Haftalık Plan</p>
+                  <h3>7 günlük doz tablosu</h3>
                 </div>
                 <div class="dose-summary" id="weekly-summary" aria-live="polite">
-                  Haftalik toplam: 0 tablet
+                  Haftalık toplam: 0 tablet
                 </div>
               </div>
-              <div class="week-grid" id="week-grid" role="grid" aria-label="Haftalik doz tablosu"></div>
+              <div class="week-grid" id="week-grid" role="grid" aria-label="Haftalık doz tablosu"></div>
             </div>
 
             <label class="field">
-              <span>Onceki INR'den bugune gercek kullanim (opsiyonel)</span>
+              <span>Önceki INR'den bugüne gerçek kullanım (opsiyonel)</span>
               <textarea
                 id="interval-pattern"
                 rows="3"
-                placeholder="Ara donemi daha iyi yansitmak icin girin. Ornek: her gun 1 adet | 1 gun 1 adet 1 gun yarim | 1,1,0.5,1,1,0.5..."
+                placeholder="Ara dönemi daha iyi yansıtmak için girin. Örnek: her gün 1 adet | 1 gün 1 adet 1 gün yarım | 1,1,0.5,1,1,0.5…"
               ></textarea>
               <small>
-                Onceki INR tarihi de varsa, uygulama bu kullanimdan haftalik esdeger
-                dozu hesaplar ve ana karar mantiginda onu kullanir.
+                Önceki INR tarihi de varsa, uygulama bu kullanımdan haftalık eşdeğer
+                dozu hesaplar ve ana karar mantığında onu kullanır.
               </small>
             </label>
 
             <label class="field">
-              <span>Gecici aciklayici faktor</span>
+              <span>Geçici açıklayıcı faktör</span>
               <select id="transient-factor">
                 <option value="none">Yok / bilinmiyor</option>
-                <option value="low">Dusuk INR'yi aciklayabilecek gecici neden var (atlanan doz, K vitamini artisi)</option>
-                <option value="high">Yuksek INR'yi aciklayabilecek gecici neden var (antibiyotik, alkol, ishal, azalan alim)</option>
+                <option value="low">Düşük INR'yi açıklayabilecek geçici neden var (atlanan doz, K vitamini artışı)</option>
+                <option value="high">Yüksek INR'yi açıklayabilecek geçici neden var (antibiyotik, alkol, ishal, azalan alım)</option>
               </select>
             </label>
 
             <label class="field">
-              <span>Eslik eden ilaclar (opsiyonel)</span>
+              <span>Eşlik eden ilaçlar (opsiyonel)</span>
               <input
                 id="drug-input"
                 type="text"
-                placeholder="Ornek: flukonazol, amiodaron, rifampisin..."
+                placeholder="Örnek: flukonazol, amiodaron, rifampisin…"
               />
               <small>
-                Warfarin ile etkilesimi bilinen ilaclari virgul ile ayirarak girin.
+                Varfarin ile etkileşimi bilinen ilaçları virgül ile ayırarak girin.
               </small>
             </label>
 
             <label class="checkbox-field">
               <input id="active-bleeding" type="checkbox" />
-              <span>Aktif kanama, melena/hematemez, norolojik semptom veya acil risk var</span>
+              <span>Aktif kanama, melena/hematemez, nörolojik semptom veya acil risk var</span>
             </label>
 
             <div class="button-row">
-              <button type="submit" class="primary-button">Oneri uret</button>
+              <button type="submit" class="primary-button">Öneri üret</button>
             </div>
           </form>
         </section>
 
+        <!-- ─── Result Card ────────────────────────────────────── -->
         <section class="card result-card">
           <div class="section-heading">
-            <p class="section-kicker">Sonuc</p>
-            <h2>Doz onerisi ve takip</h2>
+            <p class="section-kicker">Sonuç</p>
+            <h2>Doz önerisi ve takip</h2>
           </div>
           <div id="result-root" class="result-root" aria-live="polite">
             <div class="empty-state">
-              INR ve kullanim bilgilerini girip <strong>Oneri uret</strong>
-              dugmesine basin.
+              INR ve kullanım bilgilerini girip <strong>Öneri üret</strong>
+              düğmesine basın.
             </div>
           </div>
         </section>
 
+        <!-- ─── History Card ───────────────────────────────────── -->
         <section class="card history-card" id="history-section" style="display:none">
           <div class="section-heading">
             <div class="section-heading-row">
               <div>
-                <p class="section-kicker">Gecmis</p>
+                <p class="section-kicker">Geçmiş</p>
                 <h2>INR ve doz takibi</h2>
               </div>
               <button type="button" class="secondary-button small-button" id="clear-history">
-                Gecmisi temizle
+                Geçmişi temizle
               </button>
             </div>
           </div>
@@ -196,36 +206,37 @@
           <div id="history-table-root"></div>
         </section>
 
+        <!-- ─── Method Card ────────────────────────────────────── -->
         <section class="card note-card">
           <div class="section-heading">
-            <p class="section-kicker">Yontem</p>
-            <h2>Literatur temeli ve kapsam</h2>
+            <p class="section-kicker">Yöntem</p>
+            <h2>Literatür temeli ve kapsam</h2>
           </div>
           <div class="method-list">
             <p>
-              Uygulama, bakim dozu icin toplam haftalik dozun yuzdesel ayari
-              mantigini kullanan seffaf bir nomogram yaklasimi uzerine kuruldu.
+              Uygulama, bakım dozu için toplam haftalık dozun yüzdesel ayarı
+              mantığını kullanan şeffaf bir nomogram yaklaşımı üzerine kuruldu.
             </p>
             <p>
-              Hafif tek sapmada doz degistirmeden 1-2 hafta icinde tekrar INR
-              bakma secenegi korunur; daha belirgin sapmalarda haftalik dozda
-              genelde %5-20 degisim onerilir.
+              Hafif tek sapmada doz değiştirmeden 1–2 hafta içinde tekrar INR
+              bakma seçeneği korunur; daha belirgin sapmalarda haftalık dozda
+              genelde %5–20 değişim önerilir.
             </p>
             <p>
-              Onceki INR ve ara donem gercek kullanim girildiginde, uygulama
-              bant icinden daha temkinli veya daha agresif ucu secmek icin trend
-              bilgisi kullanir. Bu kisim, kilavuz bandlari uzerine kurulmus
-              uygulama mantigidir; ayri bir dogrulanmis prediktif model degildir.
+              Önceki INR ve ara dönem gerçek kullanım girildiğinde, uygulama
+              bant içinden daha temkinli veya daha agresif ucu seçmek için trend
+              bilgisi kullanır. Bu kısım, kılavuz bantları üzerine kurulmuş
+              uygulama mantığıdır; ayrı bir doğrulanmış prediktif model değildir.
             </p>
             <ul class="source-list">
               <li>
                 <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3278060/" target="_blank" rel="noreferrer">
-                  CHEST 2012 antitrombotik kilavuz ozeti
+                  CHEST 2012 antitrombbotik kılavuz özeti
                 </a>
               </li>
               <li>
                 <a href="https://sites.uw.edu/anticoag/drugs/warfarin/" target="_blank" rel="noreferrer">
-                  UW Medicine varfarin bakim dozu nomogrami
+                  UW Medicine varfarin bakım dozu nomogramı
                 </a>
               </li>
               <li>
@@ -235,12 +246,17 @@
               </li>
               <li>
                 <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8056736/" target="_blank" rel="noreferrer">
-                  Warfarin doz algoritmalari sistematik derleme
+                  Varfarin doz algoritmaları sistematik derleme
                 </a>
               </li>
             </ul>
           </div>
+          <p class="disclaimer">
+            Bu araç yalnızca bilgilendirme amaçlıdır. En doğru klinik kararı doktorunuzdan
+            veya klinisyenizden alın.
+          </p>
         </section>
+
       </main>
     </div>
 

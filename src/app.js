@@ -17,31 +17,31 @@ import {
 // ─── Drug Interactions ──────────────────────────────────────────────
 
 const DRUG_INTERACTIONS = [
-  { name: "flukonazol", direction: "increase", severity: "major", note: "CYP2C9 inhibitoru; INR'yi belirgin artirir" },
-  { name: "metronidazol", direction: "increase", severity: "major", note: "CYP2C9 inhibitoru; INR artisi beklenir" },
-  { name: "kotrimoksazol", direction: "increase", severity: "major", note: "Trimetoprim-sulfametoksazol INR'yi artirir" },
-  { name: "amiodaron", direction: "increase", severity: "major", note: "CYP2C9/1A2 inhibitoru; uzun sureli etki, doz %30-50 azaltilmali" },
-  { name: "fluoksetin", direction: "increase", severity: "moderate", note: "CYP2C9 inhibitoru; INR izlenmeli" },
-  { name: "eritromisin", direction: "increase", severity: "moderate", note: "CYP3A4 inhibitoru; INR artisi olabilir" },
-  { name: "klaritromisin", direction: "increase", severity: "moderate", note: "CYP3A4 inhibitoru; INR artisi olabilir" },
-  { name: "siprofloksasin", direction: "increase", severity: "moderate", note: "CYP1A2 inhibitoru; INR artabilir" },
-  { name: "ibuprofen", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artirir, GIS korumasi dusunulmeli" },
-  { name: "naproksen", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artirir" },
-  { name: "diklofenak", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artirir" },
-  { name: "aspirin", direction: "increase", severity: "moderate", note: "Antiplatelet + antikoagulan; kanama riski artar, endikasyon degerlendirilmeli" },
-  { name: "piroksikam", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artirir" },
-  { name: "fenofibrat", direction: "increase", severity: "moderate", note: "CYP2C9 inhibitoru; INR izlenmeli" },
-  { name: "omeprazol", direction: "increase", severity: "minor", note: "CYP2C19 inhibitoru; hafif INR artisi olabilir" },
-  { name: "parasetamol", direction: "increase", severity: "minor", note: "Yuksek dozda (>2 g/gun) INR artabilir" },
-  { name: "rifampisin", direction: "decrease", severity: "major", note: "Guclu CYP induktoru; INR belirgin duser, doz 2-3 kat artirilmali" },
-  { name: "karbamazepin", direction: "decrease", severity: "major", note: "CYP3A4/2C9 induktoru; INR dusmesi beklenir" },
-  { name: "fenitoin", direction: "decrease", severity: "major", note: "CYP induktoru; INR duser" },
-  { name: "fenobarbital", direction: "decrease", severity: "moderate", note: "CYP induktoru; INR azalabilir" },
-  { name: "kolestiramin", direction: "decrease", severity: "moderate", note: "Warfarin emilimini azaltir; en az 4 saat arayla alinmali" },
-  { name: "sukralfat", direction: "decrease", severity: "minor", note: "Warfarin emilimini hafif azaltabilir" },
-  { name: "k vitamini", direction: "decrease", severity: "major", note: "Dogrudan antagonist; diyet degisiklikleri INR'yi etkiler" },
-  { name: "st john", direction: "decrease", severity: "major", note: "St. John's Wort (sarikantaron); CYP induktoru, INR duser" },
-  { name: "sarikantaron", direction: "decrease", severity: "major", note: "CYP induktoru; INR belirgin duser" }
+  { name: "flukonazol", direction: "increase", severity: "major", note: "CYP2C9 inhibitörü; INR'yi belirgin artırır" },
+  { name: "metronidazol", direction: "increase", severity: "major", note: "CYP2C9 inhibitörü; INR artışı beklenir" },
+  { name: "kotrimoksazol", direction: "increase", severity: "major", note: "Trimetoprim-sulfametoksazol INR'yi artırır" },
+  { name: "amiodaron", direction: "increase", severity: "major", note: "CYP2C9/1A2 inhibitörü; uzun süreli etki, doz %30–50 azaltılmalı" },
+  { name: "fluoksetin", direction: "increase", severity: "moderate", note: "CYP2C9 inhibitörü; INR izlenmeli" },
+  { name: "eritromisin", direction: "increase", severity: "moderate", note: "CYP3A4 inhibitörü; INR artışı olabilir" },
+  { name: "klaritromisin", direction: "increase", severity: "moderate", note: "CYP3A4 inhibitörü; INR artışı olabilir" },
+  { name: "siprofloksasin", direction: "increase", severity: "moderate", note: "CYP1A2 inhibitörü; INR artabilir" },
+  { name: "ibuprofen", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artırır, GİS koruması düşünülmeli" },
+  { name: "naproksen", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artırır" },
+  { name: "diklofenak", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artırır" },
+  { name: "aspirin", direction: "increase", severity: "moderate", note: "Antiplatelet + antikoagülan; kanama riski artar, endikasyon değerlendirilmeli" },
+  { name: "piroksikam", direction: "increase", severity: "moderate", note: "NSAID; kanama riskini artırır" },
+  { name: "fenofibrat", direction: "increase", severity: "moderate", note: "CYP2C9 inhibitörü; INR izlenmeli" },
+  { name: "omeprazol", direction: "increase", severity: "minor", note: "CYP2C19 inhibitörü; hafif INR artışı olabilir" },
+  { name: "parasetamol", direction: "increase", severity: "minor", note: "Yüksek dozda (>2 g/gün) INR artabilir" },
+  { name: "rifampisin", direction: "decrease", severity: "major", note: "Güçlü CYP indüktörü; INR belirgin düşer, doz 2–3 kat artırılmalı" },
+  { name: "karbamazepin", direction: "decrease", severity: "major", note: "CYP3A4/2C9 indüktörü; INR düşmesi beklenir" },
+  { name: "fenitoin", direction: "decrease", severity: "major", note: "CYP indüktörü; INR düşer" },
+  { name: "fenobarbital", direction: "decrease", severity: "moderate", note: "CYP indüktörü; INR azalabilir" },
+  { name: "kolestiramin", direction: "decrease", severity: "moderate", note: "Varfarin emilimini azaltır; en az 4 saat arayla alınmalı" },
+  { name: "sukralfat", direction: "decrease", severity: "minor", note: "Varfarin emilimini hafif azaltabilir" },
+  { name: "k vitamini", direction: "decrease", severity: "major", note: "Doğrudan antagonist; diyet değişiklikleri INR'yi etkiler" },
+  { name: "st john", direction: "decrease", severity: "major", note: "St. John's Wort (sarıkantaron); CYP indüktörü, INR düşer" },
+  { name: "sarikantaron", direction: "decrease", severity: "major", note: "CYP indüktörü; INR belirgin düşer" }
 ];
 
 function checkDrugInteractions(drugText) {
@@ -155,9 +155,9 @@ function renderHistory() {
 
   const ttrHtml = ttr !== null
     ? `<div style="margin-bottom:12px">
-        <strong style="font-size:0.84rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">TTR (Terapotik Aralikta Kalma)</strong>
+        <strong style="font-size:0.84rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">TTR (Terapötik Aralıkta Kalma)</strong>
         <span class="ttr-badge ${ttr >= 60 ? "ttr-good" : "ttr-warn"}">${ttr}%</span>
-        ${ttr < 60 ? '<small style="color:var(--alert);margin-left:8px">TTR < %60: Alternatif antikoagulan degerlendirmesi dusunulebilir</small>' : ""}
+        ${ttr < 60 ? '<small style="color:var(--alert);margin-left:8px">TTR < %60: Alternatif antikoagülan değerlendirmesi düşünülebilir</small>' : ""}
        </div>`
     : "";
 
